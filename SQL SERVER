@@ -1,0 +1,20 @@
+
+
+
+
+// CODE TO KILL ALL CONNECTION TO DATABASE
+
+DECLARE @DatabaseName nvarchar(50)
+SET @DatabaseName = N'DB-NAME'
+
+DECLARE @SQL varchar(max)
+
+SELECT @SQL = COALESCE(@SQL,'') + 'Kill ' + Convert(varchar, SPId) + ';'
+FROM MASTER..SysProcesses
+WHERE DBId = DB_ID(@DatabaseName) AND SPId <> @@SPId
+
+--SELECT @SQL 
+EXEC(@SQL)
+GO
+
+drop database DB-NAME;
